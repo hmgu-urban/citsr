@@ -1,0 +1,79 @@
+---
+title: "citsr Package Examples"
+author: "Hanmin Gu"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{CITSr Package Examples}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+# Overview
+
+This vignette demonstrates how to use the `citsr` package for Controlled Interrupted Time Series (CITS) analysis, including fitting models, visualizing fitted values, and plotting counterfactual predictions.
+
+# 1. Example Data
+
+```{r example-data, eval=FALSE}
+set.seed(123)
+
+T <- 1:100
+E <- rep(c(0,1), each = length(T))
+baseline <- 50 + 2 * T
+offset <- c(rep(0, 100), rep(15, 100))
+y <- baseline + offset + rnorm(200, 0, 5)
+
+intervention_time <- 50
+I <- ifelse(rep(T, 2) > intervention_time, 1, 0)
+
+y[E == 0 & T > intervention_time] <- y[E == 0 & T > intervention_time] + 10
+y[E == 1 & T > intervention_time] <- y[E == 1 & T > intervention_time] + 40
+
+cits_example <- data.frame(
+  y = y,
+  T = rep(T,2),
+  I = I,
+  E = E
+)
+```
+
+# 2. Fit CITS Model
+
+```{r fit-cits, eval=FALSE}
+res <- cits(
+  data = cits_example,
+  y_col = "y",
+  T_col = "T",
+  I_col = "I",
+  E_col = "E"
+)
+summary(res$model)
+```
+
+# 3. Visualize Fitted Values + 95% CI
+
+```{r plot-fitted, eval=FALSE}
+plt <- plot_cits_result(
+  res,
+  y_col = "y",
+  T_col = "T",
+  E_col = "E",
+  intervention_time = 50
+)
+print(plt)
+```
+
+# 4. Visualize Counterfactual for Treatment Group
+
+```{r plot-cf, eval=FALSE}
+plt_cf <- plot_cits_result_cf(
+  res,
+  y_col = "y",
+  T_col = "T",
+  I_col = "I",
+  E_col = "E",
+  intervention_time = 50
+)
+print(plt_cf)
+```

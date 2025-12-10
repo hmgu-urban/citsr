@@ -1,0 +1,56 @@
+---
+title: "Controlled Interrupted Time Series (CITS) Methodology"
+author: "Hanmin Gu"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{CITS Methodology Overview}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+# Overview
+
+This vignette provides an overview of the Controlled Interrupted Time Series (CITS) methodology, explaining its principles, model structure, and analytical workflow.
+
+# 1. Purpose
+
+CITS is a statistical method for evaluating the effect of a specific intervention on an outcome variable over time, using both a treatment (experimental) and control group. Unlike standard Interrupted Time Series (ITS) analyses that consider a single group, CITS controls for external factors by including a control group.
+
+# 2. Data Structure
+
+- **y**: Outcome variable
+- **T**: Time index
+- **I**: Intervention indicator (0 = no intervention, 1 = applied)
+- **E**: Group indicator (0 = control, 1 = treatment)
+
+# 3. Basic Model
+
+The CITS model can be specified as:
+
+y_{it} = β0 + β1 T_t + β2 I_t + β3 E_i + β4 (T×I)_t + β5 (E×T)_{it} + β6 (E×I)_{it} + β7 (E×T×I)_{it} + ε_{it}
+
+- **T × I**: Time-varying effect of the intervention  
+- **E × T**: Difference in trend between groups  
+- **E × I**: Differential intervention effect by group  
+- **E × T × I**: Differential post-intervention trend for treatment group  
+- **ε**: Error term, may include ARMA(p,q) autocorrelation
+
+# 4. Analysis Workflow
+
+1. **Data preparation**: Create time, outcome, group, and intervention columns; compute interaction terms if needed.  
+2. **Model fitting**: Fit GLS-based CITS model, optionally specifying ARMA(p,q) correlation structure.  
+3. **Effect estimation**: Interpret β coefficients to assess intervention effects.  
+4. **Counterfactual simulation**: Predict outcome under no-intervention scenario to compare with observed results.
+
+# 5. Advantages
+
+- Controls for external confounding by including a control group  
+- Captures temporal structural changes  
+- Accommodates autocorrelated errors using ARMA models  
+
+# 6. Considerations
+
+- Clear definition of intervention timing and group assignment is required  
+- Adequate pre- and post-intervention observations are necessary  
+- Potential confounders such as trends or seasonality should be accounted for
