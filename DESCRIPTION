@@ -3,7 +3,7 @@ Title: Controlled Interrupted Time Series Analysis and Visualization
 Version: 0.1.0
 Authors@R: 
     person("Hanmin", "Gu", email = "ghm21zzang@gmail.com", role = c("aut", "cre"))
-Description: Description: The 'citsr' package provides tools for Controlled Interrupted Time Series (CITS) analysis. 
+Description: The 'citsr' package provides tools for Controlled Interrupted Time Series (CITS) analysis. 
     It allows users to prepare and manipulate panel time-series data, fit GLS-based CITS models with optional 
     ARMA(p,q) autocorrelation, calculate fitted values with robust standard errors (CR2), and visualize results. 
     Additionally, the package supports plotting counterfactual scenarios for treatment groups after interventions,
